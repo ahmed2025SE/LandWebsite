@@ -6,5 +6,8 @@
         public double area { get; set; }
         public double price { get; set; }
         public string location { get; set; }
+
+        public Guid OwnerId {  get; set; }
+        public Owner Owner { get; set; } = new();
     }
 }
