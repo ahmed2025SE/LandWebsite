@@ -1,5 +1,48 @@
-﻿<h3>OwnerListComponent</h3>
+﻿@page "/OwnerListComponent"
+@using LandWebsite.Components.Pages.OwnerComponents
+@using LandWebsite.Data.Entites
+@rendermode InteractiveServer
+
+
+
+
+<MudTable Items="Owners" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
+
+    <HeaderContent>
+        <MudTh>معرف صاحب العقار</MudTh>
+        <MudTh>اسم صاحب العقار</MudTh>
+        <MudTh>الايميل</MudTh>
+        <MudTh>رقم الهاتف</MudTh>
+        
+
+    </HeaderContent>
+    <RowTemplate>
+
+        <MudTd DataLabel="معرف صاحب العقار">@context.ownerId</MudTd>
+        <MudTd DataLabel="اسم صاحب العقار">@context.ownerName</MudTd>
+        <MudTd DataLabel="الايميل">@context.email</MudTd>
+        <MudTd DataLabel="رقم الهاتف">@context.phone</MudTd>
+      
+
+    </RowTemplate>
+</MudTable>
+
+
 
 @code {
+
+    private bool _loading = false;
+    public List<Owner> Owners { get; set; } = new List<Owner>();
+    OwnerDesignServices _ownerDesignServices; /* هنا عرفت متغير نوعه كلاس سيرفز*/
+
+    protected override async Task OnInitializedAsync()  /* عند تحميل بشكل غير متزامن نفذ كود بتاعك.... هذا الداله تشتغل عند تحميل الصفحه*/
+    {
+        _ownerDesignServices = new OwnerDesignServices();/* هنا انشئت كائن من كلاس السرفيز*/
+        _loading = true;
+        await Task.Delay(2000);
+        Owners = _ownerDesignServices.GetOwners();
+        _loading = false;
+    }
+
 
 }
