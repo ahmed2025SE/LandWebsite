@@ -40,7 +40,7 @@
             <MudButton Color="Color.Error"
                        Variant="Variant.Filled"
                        StartIcon="@Icons.Material.Filled.Delete"
-                       />
+                       OnClick="()=>DeleteOwner(context)" />
 
 
         </MudTd>
@@ -68,6 +68,11 @@
     public void NavigateToAddOwner()
     {
         NavigationManager.NavigateTo("OwnerEdit");
+    }
+
+    public void DeleteOwner(Owner owner)
+    {
+        Owners.Remove(owner);
     }
 
 
