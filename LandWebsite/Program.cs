@@ -1,5 +1,6 @@
 using LandWebsite.Components;
 using LandWebsite.Components.Account;
+using LandWebsite.Components.Pages.OwnerComponents;
 using LandWebsite.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<OwnerDesignServices>();
 
 builder.Services.AddAuthentication(options =>
     {

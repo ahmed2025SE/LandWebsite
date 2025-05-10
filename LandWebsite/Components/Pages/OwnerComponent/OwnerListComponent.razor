@@ -3,6 +3,7 @@
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
+@inject OwnerDesignServices _ownerDesignServices
 
 
 
@@ -55,11 +56,12 @@
 
     private bool _loading = false;
     public List<Owner> Owners { get; set; } = new List<Owner>();
-    OwnerDesignServices _ownerDesignServices; /* هنا عرفت متغير نوعه كلاس سيرفز*/
+    /*تم نقل تعريف السرفيز الى البروقرام و حقنه داخل هذه الصحفه*/
+     /*   OwnerDesignServices _ownerDesignServices; /* هنا عرفت متغير نوعه كلاس سيرفز*/  
 
     protected override async Task OnInitializedAsync()  /* عند تحميل بشكل غير متزامن نفذ كود بتاعك.... هذا الداله تشتغل عند تحميل الصفحه*/
     {
-        _ownerDesignServices = new OwnerDesignServices();/* هنا انشئت كائن من كلاس السرفيز*/
+       /* _ownerDesignServices = new OwnerDesignServices();/* هنا انشئت كائن من كلاس السرفيز*/   
         _loading = true;
         await Task.Delay(2000);
         Owners = _ownerDesignServices.GetOwners();
