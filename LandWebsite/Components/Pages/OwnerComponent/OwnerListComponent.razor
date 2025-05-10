@@ -2,17 +2,26 @@
 @using LandWebsite.Components.Pages.OwnerComponents
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
+@inject NavigationManager NavigationManager
 
 
 
 
 <MudTable Items="Owners" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   @onclick="NavigateToAddOwner">Add</MudButton>
 
+    </ToolBarContent>
     <HeaderContent>
         <MudTh>معرف صاحب العقار</MudTh>
         <MudTh>اسم صاحب العقار</MudTh>
         <MudTh>الايميل</MudTh>
         <MudTh>رقم الهاتف</MudTh>
+        <MudTh>العمليات </MudTh>
         
 
     </HeaderContent>
@@ -22,6 +31,19 @@
         <MudTd DataLabel="اسم صاحب العقار">@context.ownerName</MudTd>
         <MudTd DataLabel="الايميل">@context.email</MudTd>
         <MudTd DataLabel="رقم الهاتف">@context.phone</MudTd>
+        <MudTd>
+            <MudButton Color="Color.Primary"
+                       Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.Edit" />
+
+
+            <MudButton Color="Color.Error"
+                       Variant="Variant.Filled"
+                       StartIcon="@Icons.Material.Filled.Delete"
+                       />
+
+
+        </MudTd>
       
 
     </RowTemplate>
@@ -42,6 +64,10 @@
         await Task.Delay(2000);
         Owners = _ownerDesignServices.GetOwners();
         _loading = false;
+    }
+    public void NavigateToAddOwner()
+    {
+        NavigationManager.NavigateTo("");
     }
 
 
