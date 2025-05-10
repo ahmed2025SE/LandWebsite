@@ -5,9 +5,38 @@
 
 <h3>OwnerEdit</h3>
 
+<MudTextField @bind-Value="Owner.ownerName" Label="Name"></MudTextField>
+<MudTextField @bind-Value="Owner.email" Label="email"></MudTextField>
+<MudTextField @bind-Value="Owner.phone" Label="phone"></MudTextField>
+<MudButton Color="Color.Primary" @onclick="Save" Variant="Variant.Filled">Save</MudButton>
+
+
 @code {
 
-   
+    [Parameter] public Guid ownerId { get; set; }
+    private Owner Owner { get; set; } = new Owner();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(1000);
+        Owner = new Owner()
+            {
+                ownerId = ownerId,
+                ownerName = "mohmed",
+                email = "Mohmed@gmail.com",
+                phone = 92454566
+
+            };
+
+
+    }
+
+    private async Task Save()
+    {
+        await Task.Delay(1000);
+        Console.WriteLine($"Saved Owner: {Owner.ownerName}");
+    }
+
 
     
 
