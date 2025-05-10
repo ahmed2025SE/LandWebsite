@@ -44,9 +44,39 @@ namespace LandWebsite.Components.Pages.OwnerComponents
             ];
 
 
+
         }
 
-    
+        public Owner GetOwnerById(Guid ownerid)
+        {
+            return new Owner
+            {
+                ownerId = ownerid,
+                ownerName = "ahmed",
+                email = "ahmed@gmail.com",
+                phone = 092888333
+            };
+
+
+        }
+
+
+        public Owner Save(Owner owner)
+        {
+            return owner;
+        }
+
+        public void Delete(Owner owner)
+        {
+
+        }
+        public Owner Update(Owner owner)
+        {
+            return owner;
+        }
+
+
+
     }
 
 }
