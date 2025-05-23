@@ -3,7 +3,7 @@ using LandWebsite.Data.Entites;
 
 namespace LandWebsite.Components.Pages.OwnerComponents
 {
-    public class OwnerDesignServices
+    public class OwnerDesignServices : IOwnerServices
     {
         public List<Owner> GetOwners()
         {
@@ -25,7 +25,7 @@ namespace LandWebsite.Components.Pages.OwnerComponents
                     email = "ali@gmail.com",
                     phone = 09127773
                 } ,
-                 
+
                  new Owner
                 {
                     ownerId = Guid.NewGuid(),
@@ -33,7 +33,7 @@ namespace LandWebsite.Components.Pages.OwnerComponents
                     email = "krim@gmail.com",
                     phone = 0934466
                 },
-                
+
                  new Owner
                 {
                     ownerId = Guid.NewGuid(),
