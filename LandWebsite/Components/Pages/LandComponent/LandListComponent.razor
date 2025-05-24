@@ -1,0 +1,62 @@
+﻿@page "/LandListComponent"
+@using LandWebsite.Data.Entites
+@rendermode InteractiveServer
+<h3>LandListComponent</h3>
+
+<MudTable Items="Lands" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <ToolBarContent>
+        <MudSpacer />
+        <MudButton Color="Color.Primary"
+        Variant="Variant.Filled"
+        StartIcon="@Icons.Material.Filled.Add"
+       @*  @onclick="" *@>Add</MudButton>
+
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>معرف الارض</MudTh>
+        <MudTh>المساحه</MudTh>
+        <MudTh>السعر</MudTh>
+        <MudTh>الموقع</MudTh>
+        <MudTh>معرف صاحب العقار</MudTh>
+        <MudTh>العمليات </MudTh>
+
+
+    </HeaderContent>
+    <RowTemplate>
+
+        <MudTd DataLabel="معرف الارض">@context.landId</MudTd>
+        <MudTd DataLabel="المساحه">@context.area</MudTd>
+        <MudTd DataLabel="السعر">@context.price</MudTd>
+        <MudTd DataLabel="الموقع">@context.location</MudTd>
+        <MudTd DataLabel="معرف صاحب العقار">@context.OwnerId</MudTd>
+        <MudTd>
+            <MudButton Color="Color.Primary"
+            Variant="Variant.Filled"
+            StartIcon="@Icons.Material.Filled.Edit"
+            @*  OnClick="()=>(context)" *@ />
+
+
+            <MudButton Color="Color.Error"
+            Variant="Variant.Filled"
+            StartIcon="@Icons.Material.Filled.Delete"
+            @*   OnClick="()=>(context)" *@ />
+
+
+        </MudTd>
+
+
+    </RowTemplate>
+</MudTable>
+@code {
+    private bool _loading = false;
+    public List<Land> Lands { get; set; } = new List<Land>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        await Task.Delay(2000);
+       
+        _loading = false;
+    }
+
+}
