@@ -1,6 +1,8 @@
 ﻿@page "/LandListComponent"
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject ILandServices _landDesignServices
 <h3>LandListComponent</h3>
 
 <MudTable Items="Lands" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
@@ -9,7 +11,7 @@
         <MudButton Color="Color.Primary"
         Variant="Variant.Filled"
         StartIcon="@Icons.Material.Filled.Add"
-       @*  @onclick="" *@>Add</MudButton>
+                   @onclick="NavigateToAddLand">Add</MudButton>
 
     </ToolBarContent>
     <HeaderContent>
@@ -33,13 +35,13 @@
             <MudButton Color="Color.Primary"
             Variant="Variant.Filled"
             StartIcon="@Icons.Material.Filled.Edit"
-            @*  OnClick="()=>(context)" *@ />
+                       OnClick="()=>NavigateToEditLand(context)" />
 
 
             <MudButton Color="Color.Error"
             Variant="Variant.Filled"
             StartIcon="@Icons.Material.Filled.Delete"
-            @*   OnClick="()=>(context)" *@ />
+                       OnClick="()=>DeleteLand(context)" />
 
 
         </MudTd>
@@ -55,8 +57,28 @@
     {
         _loading = true;
         await Task.Delay(2000);
-       
+        Lands = await _landDesignServices.GetLands();
         _loading = false;
+    }
+
+    public void NavigateToAddLand()
+    {
+        NavigationManager.NavigateTo("");
+    }
+
+
+    public void NavigateToEditLand(Land land)
+    {
+        NavigationManager.NavigateTo($"/{land.landId}");
+    }
+
+
+
+    public async Task DeleteLand(Land land)
+    {
+        await _landDesignServices.DeleteAsync(land);
+        Lands.Remove(land);
+       
     }
 
 }
