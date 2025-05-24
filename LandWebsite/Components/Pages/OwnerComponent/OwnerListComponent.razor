@@ -3,7 +3,8 @@
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
-@inject OwnerDesignServices _ownerDesignServices
+@inject IOwnerServices _ownerDesignServices
+@inject ISnackbar Snackbar
 
 
 
@@ -35,7 +36,8 @@
         <MudTd>
             <MudButton Color="Color.Primary"
                        Variant="Variant.Filled"
-                       StartIcon="@Icons.Material.Filled.Edit" />
+                       StartIcon="@Icons.Material.Filled.Edit"
+                       OnClick="()=>NavigateToEditOwner(context)" />
 
 
             <MudButton Color="Color.Error"
@@ -59,12 +61,14 @@
     /*تم نقل تعريف السرفيز الى البروقرام و حقنه داخل هذه الصحفه*/
      /*   OwnerDesignServices _ownerDesignServices; /* هنا عرفت متغير نوعه كلاس سيرفز*/  
 
-    protected override async Task OnInitializedAsync()  /* عند تحميل بشكل غير متزامن نفذ كود بتاعك.... هذا الداله تشتغل عند تحميل الصفحه*/
+   
+     
+     protected override async Task OnInitializedAsync()  /* عند تحميل بشكل غير متزامن نفذ كود بتاعك.... هذا الداله تشتغل عند تحميل الصفحه*/
     {
        /* _ownerDesignServices = new OwnerDesignServices();/* هنا انشئت كائن من كلاس السرفيز*/   
         _loading = true;
         await Task.Delay(2000);
-        Owners = _ownerDesignServices.GetOwners();
+        Owners = await _ownerDesignServices.GetOwners();
         _loading = false;
     }
     public void NavigateToAddOwner()
@@ -72,9 +76,20 @@
         NavigationManager.NavigateTo("OwnerEdit");
     }
 
-    public void DeleteOwner(Owner owner)
+
+    public void NavigateToEditOwner(Owner owner)
     {
+        NavigationManager.NavigateTo($"OwnerEdit/{owner.ownerId}");
+    }
+
+
+
+    public async Task DeleteOwner(Owner owner)
+    {
+        await _ownerDesignServices.DeleteAsync(owner);
         Owners.Remove(owner);
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
     }
 
 

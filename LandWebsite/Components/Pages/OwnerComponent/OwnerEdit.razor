@@ -1,41 +1,111 @@
 ﻿@page "/OwnerEdit"
 @page "/OwnerEdit/{ownerId:guid}"/*  صفحه تعديل المالك ما ينفعش نجبها من دون ما نعرف شن بندير بيها لانه ح نستخدمها مرتين مره لما بنضيف مالك و مره لتعديل*/
+@using LandWebsite.Components.Pages.OwnerComponents
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
+@inject IOwnerServices _ownerDesignServices
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
-<h3>OwnerEdit</h3>
 
-<MudTextField @bind-Value="Owner.ownerName" Label="Name"></MudTextField>
-<MudTextField @bind-Value="Owner.email" Label="email"></MudTextField>
-<MudTextField @bind-Value="Owner.phone" Label="phone"></MudTextField>
-<MudButton Color="Color.Primary" @onclick="Save" Variant="Variant.Filled">Save</MudButton>
+
+@if (owner==null)
+{
+    <div class="d-flex justify-center align-center ma-auto">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true"/>
+    </div>
+}
+else
+{
+    <MudForm Model="owner" @ref="form">
+        <MudCard Elevation="6">
+            <MudCardHeader>
+                <MudText Typo="Typo.h5" Align="Align.Center"> @PageHeaderText</MudText>
+            </MudCardHeader>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="owner.ownerName" 
+                Label="Name"
+                Variant="Variant.Outlined" 
+                Margin="Margin.Dense"/>
+            </MudItem>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="owner.email"
+                Label="email"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="owner.phone"
+                Label="phone"
+                Variant="Variant.Outlined"
+                Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudCardActions Class="d-flex justify-end mt-2">
+                <MudButton Variant="Variant.Outlined"
+                CoLor="Color.Primary"
+                OnCLick="HandLeSaveAsync">حفظ </MudButton>
+                <MudButton Variant="Variant.Filled"
+                CoLor="Color.Primary"
+                OnCLick="HandLeSaveAndCloseAsync">حفظ واغلاق</MudButton> 
+
+            </MudCardActions>
+
+
+        </MudCard>
+
+    </MudForm>
+
+
+}
+
+
 
 
 @code {
+    protected MudForm? form;
+    protected bool success=false;
+    private string PageHeaderText = "اضافة صاحب عقار جديد";
+
+
 
     [Parameter] public Guid ownerId { get; set; }
-    private Owner Owner { get; set; } = new Owner();
+    private Owner owner { get; set; } = new Owner();
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1000);
-        Owner = new Owner()
-            {
-                ownerId = ownerId,
-                ownerName = "mohmed",
-                email = "Mohmed@gmail.com",
-                phone = 92454566
+        if (ownerId==Guid.Empty)
+        {
+            PageHeaderText = "اضافة صاحب عقار جديد";
+            owner = new Owner();
 
-            };
+        }
 
-
+        else
+        {
+            PageHeaderText = " تعديل صاحب العقار";
+            owner = await _ownerDesignServices.GetOwnerByownerId(ownerId);
+        }
     }
 
-    private async Task Save()
+         private async Task HandLeSaveAsync()
+        {
+            await _ownerDesignServices.Upsert(owner);
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
+        }
+
+    private async Task HandLeSaveAndCloseAsync()
     {
-        await Task.Delay(1000);
-        Console.WriteLine($"Saved Owner: {Owner.ownerName}");
+        await _ownerDesignServices.Upsert(owner);
+        NavigationManager.NavigateTo("OwnerListComponent");
     }
+
+
+
 
 
     
