@@ -1,0 +1,114 @@
+﻿@page "/LandEdit"
+@page "/LandEdit/{landId:guid}"
+@using LandWebsite.Data.Entites
+@rendermode InteractiveServer
+@inject ILandServices _landDesignServices
+@inject NavigationManager NavigationManager
+<h3>LandEdit</h3>
+
+
+@if (land == null)
+{
+    <div class="d-flex justify-center align-center ma-auto">
+        <MudProgressCircular Color="Color.Primary" Size="Size.Large" Indeterminate="true" />
+    </div>
+}
+else
+{
+    <MudForm Model="land" @ref="form">
+        <MudCard Elevation="6">
+            <MudCardHeader>
+                <MudText Typo="Typo.h5" Align="Align.Center"> @PageHeaderText</MudText>
+            </MudCardHeader>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="land.area"
+                              Label="المساحة"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="land.price"
+                              Label="السعر"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="land.location"
+                              Label="الموقع"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense" />
+            </MudItem>
+            <MudItem xs="12" md="12" lg="12">
+                <MudTextField @bind-Value="land.OwnerId"
+                              Label="معرف صاحب العقار"
+                              Variant="Variant.Outlined"
+                              Margin="Margin.Dense" />
+            </MudItem>
+
+            <MudCardActions Class="d-flex justify-end mt-2">
+                <MudButton Variant="Variant.Outlined"
+                           CoLor="Color.Primary"
+                           OnCLick="HandLeSaveAsync">حفظ </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           CoLor="Color.Primary"
+                           OnCLick="HandLeSaveAndCloseAsync">حفظ واغلاق</MudButton>
+
+            </MudCardActions>
+
+
+        </MudCard>
+
+    </MudForm>
+
+
+}
+
+@code {
+    protected MudForm? form;
+    protected bool success = false;
+    private string PageHeaderText = "اضافة ارض جديده";
+
+
+
+    [Parameter] public Guid landId { get; set; }
+    private Land land { get; set; } = new Land();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (landId == Guid.Empty)
+        {
+            PageHeaderText = "اضافة ارض جديده";
+            land = new Land();
+
+        }
+
+        else
+        {
+            PageHeaderText = " تعديل ارض";
+            land = await _landDesignServices.GetLandBylandId(landId);
+        }
+    }
+
+    private async Task HandLeSaveAsync()
+    {
+        await _landDesignServices.Upsert(land);
+        // Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        // Snackbar.Add("تم الحفظ بنجاح", Severity.Success);
+    }
+
+    private async Task HandLeSaveAndCloseAsync()
+    {
+        await _landDesignServices.Upsert(land);
+        NavigationManager.NavigateTo("LandListComponent");
+    }
+
+
+
+
+
+
+
+}
