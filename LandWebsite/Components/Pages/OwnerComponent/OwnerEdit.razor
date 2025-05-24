@@ -1,5 +1,6 @@
 ﻿@page "/OwnerEdit"
 @page "/OwnerEdit/{ownerId:guid}"/*  صفحه تعديل المالك ما ينفعش نجبها من دون ما نعرف شن بندير بيها لانه ح نستخدمها مرتين مره لما بنضيف مالك و مره لتعديل*/
+@using LandWebsite.Components.Pages.LandComponent
 @using LandWebsite.Components.Pages.OwnerComponents
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
@@ -59,6 +60,22 @@ else
 
     </MudForm>
 
+    <MudTabs Centered="_centered" Color="Color.Primary">
+
+        <MudTabPanel Text=" عرض الاراضي" >
+           
+            @* <CascadingValue Value=""> *@
+            <LandListComponent />     @* الغرض منها تعرض جميع الاراضي الموجود في قاعده البيانات *@
+                                       @* سيتم التحسين في الكود نظرن لضيق الوقت ..لكي يتم عرض الاراضي الخاصه بالمالك العقار الواحد *@
+            @* </CascadingValue> *@
+
+
+        </MudTabPanel>
+
+    </MudTabs>
+
+
+
 
 }
 
@@ -69,7 +86,7 @@ else
     protected MudForm? form;
     protected bool success=false;
     private string PageHeaderText = "اضافة صاحب عقار جديد";
-
+    bool _centered = true;
 
 
     [Parameter] public Guid ownerId { get; set; }
@@ -91,17 +108,22 @@ else
         }
     }
 
-         private async Task HandLeSaveAsync()
-        {
-            await _ownerDesignServices.Upsert(owner);
+    private async Task HandLeSaveAsync()
+    {
+        await _ownerDesignServices.Upsert(owner);
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
         Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
-        }
+    }
 
     private async Task HandLeSaveAndCloseAsync()
     {
         await _ownerDesignServices.Upsert(owner);
         NavigationManager.NavigateTo("OwnerListComponent");
+    }
+
+    private void detals()
+    {
+        
     }
 
 
