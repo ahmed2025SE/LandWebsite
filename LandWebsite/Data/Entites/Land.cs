@@ -8,6 +8,6 @@
         public string location { get; set; }
 
         public Guid OwnerId {  get; set; }
-        public Owner Owner { get; set; } = new();
+        public Owner Owner { get; set; } 
     }
 }

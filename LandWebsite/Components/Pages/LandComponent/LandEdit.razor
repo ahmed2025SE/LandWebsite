@@ -1,5 +1,5 @@
-﻿@page "/LandEdit"
-@page "/LandEdit/{landId:guid}"
+﻿@page "/LandEdit/{OwnerId:guid}"
+@page "/LandEdit/{landId:guid}/{OwnerId:guid}"
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
 @inject ILandServices _landDesignServices
@@ -41,12 +41,7 @@ else
                               Variant="Variant.Outlined"
                               Margin="Margin.Dense" />
             </MudItem>
-            <MudItem xs="12" md="12" lg="12">
-                <MudTextField @bind-Value="land.OwnerId"
-                              Label="معرف صاحب العقار"
-                              Variant="Variant.Outlined"
-                              Margin="Margin.Dense" />
-            </MudItem>
+           
 
             <MudCardActions Class="d-flex justify-end mt-2">
                 <MudButton Variant="Variant.Outlined"
@@ -67,12 +62,13 @@ else
 }
 
 @code {
+
     protected MudForm? form;
     protected bool success = false;
     private string PageHeaderText = "اضافة ارض جديده";
 
 
-
+    [Parameter] public Guid OwnerId { get; set; }
     [Parameter] public Guid landId { get; set; }
     private Land land { get; set; } = new Land();
 
@@ -82,7 +78,7 @@ else
         {
             PageHeaderText = "اضافة ارض جديده";
             land = new Land();
-
+			land.OwnerId = OwnerId;
         }
 
         else
@@ -102,7 +98,7 @@ else
     private async Task HandLeSaveAndCloseAsync()
     {
         await _landDesignServices.Upsert(land);
-        NavigationManager.NavigateTo("LandListComponent");
+        NavigationManager.NavigateTo($"OwnerEdit/{OwnerId}");
     }
 
 

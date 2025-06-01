@@ -62,15 +62,18 @@ else
 
     <MudTabs Centered="_centered" Color="Color.Primary">
 
-        <MudTabPanel Text=" عرض الاراضي" >
-           
-            @* <CascadingValue Value=""> *@
-            <LandListComponent />     @* الغرض منها تعرض جميع الاراضي الموجود في قاعده البيانات *@
-                                       @* سيتم التحسين في الكود نظرن لضيق الوقت ..لكي يتم عرض الاراضي الخاصه بالمالك العقار الواحد *@
-            @* </CascadingValue> *@
+        @if (ownerId != Guid.Empty) // اذا كان معرف المالك غير فارغ يعني اننا في صفحه تعديل و قم باظهار كل اراضيه
+        {
+            <MudTabPanel Text=" عرض الاراضي">
+
+                <CascadingValue Value="ownerId">
+                    <LandListComponent />
+                </CascadingValue>
 
 
-        </MudTabPanel>
+            </MudTabPanel>
+        }
+        
 
     </MudTabs>
 

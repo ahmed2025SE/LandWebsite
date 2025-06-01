@@ -53,6 +53,14 @@ namespace LandWebsite.Components.Pages.LandComponent
 
         }
 
+        //----------- احصل على جميع الاراضي من خلال معرف صاحب العقار --------------
+        public Task<List<Land>> GetLandsByOwnerId(Guid OwnerId)
+        {
+            var _dbContext = _dbContextFactory.CreateDbContext();
+            return _dbContext.Lands.Where(a => a.OwnerId ==OwnerId).ToListAsync();
+
+        }
+
 
 
         //-------------  اضافه او تعديل ارض------------------
@@ -65,7 +73,7 @@ namespace LandWebsite.Components.Pages.LandComponent
                 existingLand.area = land.area;
                 existingLand.price = land.price;
                 existingLand.location = land.location;
-                existingLand.OwnerId = land.OwnerId;
+               
                 _dbContext.Lands.Update(existingLand);
             }
             else
