@@ -8,7 +8,9 @@
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 
-
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 @if (owner==null)
 {
@@ -115,19 +117,21 @@ else
     {
         await _ownerDesignServices.Upsert(owner);
         Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-        Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
+        Snackbar.Add("تم حفظ صاحب العقار بنجاح", Severity.Success);
     }
 
     private async Task HandLeSaveAndCloseAsync()
     {
         await _ownerDesignServices.Upsert(owner);
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("تم حفظ صاحب العقار بنجاح", Severity.Success);
         NavigationManager.NavigateTo("OwnerListComponent");
     }
 
-    private void detals()
-    {
+    // private void detals()
+    // {
         
-    }
+    // }
 
 
 

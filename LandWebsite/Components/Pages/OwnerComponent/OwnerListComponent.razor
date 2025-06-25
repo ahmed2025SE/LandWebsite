@@ -1,12 +1,16 @@
 ﻿@page "/OwnerListComponent"
+@using LandWebsite.Components.Pages.Dialogs
 @using LandWebsite.Components.Pages.OwnerComponents
 @using LandWebsite.Data.Entites
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 @inject IOwnerServices _ownerDesignServices
 @inject ISnackbar Snackbar
+@inject IDialogService DialogService
 
-
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 
 <MudTable Items="Owners" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
@@ -84,13 +88,43 @@
 
 
 
+    // public async Task DeleteOwner(Owner owner)
+    // {
+    //     await _ownerDesignServices.DeleteAsync(owner);
+    //     Owners.Remove(owner);
+    //     Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+    //     Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
+    // }
+
+
+
     public async Task DeleteOwner(Owner owner)
     {
-        await _ownerDesignServices.DeleteAsync(owner);
-        Owners.Remove(owner);
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
-        Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
+        var parameters = new DialogParameters
+    {
+        { "ContentText", "هل أنت متأكد من عملية الحذف؟" },
+        { "ConfirmationText", "حذف" },
+        { "CancelText", "إلغاء" },
+        { "Color", Color.Error }
+    };
+
+
+        var _dialogOptions = new DialogOptions() { MaxWidth = MaxWidth.Medium, BackdropClick = false };
+        var msg = $"سيتم حذف صاحب العقار: {owner.ownerName}";
+        var dialog = await DialogService.ShowAsync<ConfirmDelete>(msg, parameters, _dialogOptions);
+
+        var result = await dialog.Result;
+        
+        if (result != null && !result.Canceled)
+        {
+            await _ownerDesignServices.DeleteAsync(owner);
+            Owners.Remove(owner);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+            Snackbar.Add("تم حذف صاحب العقار بنجاح", Severity.Success);
+        }
     }
+
+
 
 
 }

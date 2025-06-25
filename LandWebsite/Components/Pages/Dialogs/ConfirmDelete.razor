@@ -1,0 +1,23 @@
+﻿<MudDialog>
+    <DialogContent>
+        <div style="text-align: center">
+            <MudText>@ContentText</MudText>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@CancelText</MudButton>
+        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ConfirmationText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+    [Parameter] public string ConfirmationText { get; set; }
+    [Parameter] public string CancelText { get; set; }
+    [Parameter] public Color Color { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+    void Cancel() => MudDialog.Cancel();
+}
